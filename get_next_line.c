@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/06/30 13:45:13 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/04 09:34:34 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	main(void)
 	int		fd1;
 	int		fd2;
 	int		fd3;
-	fd1 = open("test.txt", O_RDONLY);
+	fd1 = open("test1.txt", O_RDONLY);
 	fd2 = open("test2.txt", O_RDONLY);
 	fd3 = open("test3.txt", O_RDONLY);
 	i = 1;
