@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/06 15:47:16 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/06 16:25:18 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char *read_new_line(char *s_str)//s_strから一行を抜き出して新しい�
 		return (NULL);
 	while(s_str[i] && s_str[i] != '\n')//終端または改行までのバイト数
 		i++;
-	str = malloc((i + 2) * sizeof(char));//s_strの改行もしくは終端までのサイズをmallocしてメモリを確保
+	str = (char *)malloc((i + 2) * sizeof(char));//s_strの改行もしくは終端までのサイズをmallocしてメモリを確保
 	if(!str)
 		return (NULL);
 	i = 0;
@@ -51,13 +51,13 @@ char *other_new_str(char *s_str)
 	i = 0;
 	j=0;
 	while(s_str[i] && s_str[i] != '\n')//終端または改行までのバイト数
-	i++;
+		i++;
 	if(!s_str[i])
 	{
 		free(s_str);
 		return (NULL);
 	}
-	str = malloc((ft_strlen(s_str) - i + 1) * sizeof(char));//s_strの全体-s_strの一行分のサイズ+NULLをmalloc
+	str = (char *)malloc((ft_strlen(s_str) - i + 1) * sizeof(char));//s_strの全体-s_strの一行分のサイズ+NULLをmalloc
 	if(!str)
 		return (NULL);
 	i++;

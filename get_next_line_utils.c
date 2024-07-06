@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:38:01 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/06 15:23:44 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/06 16:18:45 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,10 @@ size_t	ft_strlen(const char *str)
 	size_t	count;
 
 	count = 0;
-	while (*str != '\0')
-	{
-		str++;
+	if (!s)
+		return (0);
+	while (str[count] != '\0')
 		count++;
-	}
 	return (count);
 }
 
