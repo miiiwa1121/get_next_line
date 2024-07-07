@@ -6,48 +6,13 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/07 18:10:41 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/07 18:36:37 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <fcntl.h>
 #include <stdlib.h>
-
-char	*ft_strchr(const char *s, int c)
-{
-	if (!s)
-		return (NULL);
-	while (*s != (char)c)
-	{
-		if (*s == '\0')
-			return (NULL);
-		s++;
-	}
-	return ((char*)s);
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	char	*str;
-	char	*str_tmp;
-	int		len;
-
-	len = 0;
-	if (!s1 || !s2)
-		return (NULL);
-	len = ft_strlen(s1) + ft_strlen(s2);
-	str = (char *)malloc(sizeof(char) * (len + 1));
-	if (!str)
-		return (NULL);
-	str_tmp = str;
-	while (*s1)
-		*str++ = *s1++;
-	while (*s2)
-		*str++ = *s2++;
-	*str = '\0';
-	return (str_tmp);
-}
 
 char	*save_str(char *save)
 {
@@ -103,34 +68,60 @@ char	*extract_line(char *save)
 	return (line);
 }
 
-char	*get_line(int fd, char *save)
-{
-	char	*buff;
-	int		bytes;
-	char	*tmp;
+// char	*get_line(int fd, char *save)
+// {
+// 	char	*buff;
+// 	int		bytes;
+// 	char	*tmp;
 
-	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!buff)
-		return (NULL);
-	bytes = 1;
-	while (bytes > 0)
+// 	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
+// 	if (!buff)
+// 		return (NULL);
+// 	bytes = 1;
+// 	while (bytes > 0)
+// 	{
+// 		bytes = read(fd, buff, BUFFER_SIZE);
+// 		if (bytes == -1)
+// 		{
+// 			free(buff);
+// 			return (NULL);
+// 		}
+// 		buff[bytes] = '\0';
+// 		tmp = ft_strjoin(save, buff);
+// 		free(save);
+// 		save = tmp;
+// 		if (ft_strchr(buff, '\n'))
+// 			break;
+// 	}
+// 	free(buff);
+// 	return (save);
+// }
+
+char *get_line(int fd, char *save)
+{
+	static char buff[BUFFER_SIZE + 1];
+	int bytes;
+	char *tmp;
+
+	while (1)
 	{
 		bytes = read(fd, buff, BUFFER_SIZE);
-		if (bytes == -1)
-		{
-			free(buff);
-			return (NULL);
-		}
+		if (bytes <= 0)
+			break;
 		buff[bytes] = '\0';
 		tmp = ft_strjoin(save, buff);
+		if (!tmp)
+		{
+			free(save);
+			return (NULL);
+		}
 		free(save);
 		save = tmp;
 		if (ft_strchr(buff, '\n'))
 			break;
 	}
-	free(buff);
 	return (save);
-}
+	}
 
 char	*get_next_line(int fd)
 {
@@ -147,6 +138,12 @@ char	*get_next_line(int fd)
 	line = extract_line(save);
 	/* 改行が含まれているsaveの、改行もしくは終端までのバイト+2分のメモリを確保して、lineとする。
 	引数saveが改行もしくは終端までの間、lineに先頭からコピーし、最後にNULLを入れて、リターンする。*/
+	if (!line)
+	{
+		free(save);
+		save = NULL;
+		return (NULL);
+	}
 	save = save_str(save);
 	/* 改行が含まれているsaveの、改行もしくは終端から終端までのバイト+1分のメモリを確保して、
 	new_saveとする。引数saveが改行もしくは終端から終端までの間、new_saveに先頭からコピーし、
@@ -154,28 +151,28 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-// #include <stdio.h>
+#include <stdio.h>
 
-// int main(void)
-// {
-//     int fd;
-//     int i;
-//     char *line;
-//     const char *filename = "text1.txt";
+int main(void)
+{
+    int fd;
+    int i;
+    char *line;
+    const char *filename = "text1.txt";
 
-//     i = 0;
-//     fd = open(filename, O_RDWR);
-//     if (fd < 0)
-//     {
-//         printf("openエラー\n");
-//         return (1);
-//     }
-//     while ((line = get_next_line(fd)) != NULL && i < 7)
-//     {
-//         printf("line [%d]: %s\n", i, line);
-//         free(line);
-//         i++;
-//     }
-//     close(fd);
-//     return (0);
-// }
+    i = 0;
+    fd = open(filename, O_RDWR);
+    if (fd < 0)
+    {
+        printf("openエラー\n");
+        return (1);
+    }
+    while ((line = get_next_line(fd)) != NULL && i < 7)
+    {
+        printf("line [%d]: %s\n", i, line);
+        free(line);
+        i++;
+    }
+    close(fd);
+    return (0);
+}
