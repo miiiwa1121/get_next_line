@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:38:01 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/07 17:34:06 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/07 17:44:11 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,15 @@ size_t	ft_strlen(const char *str)
 
 char	*ft_strchr(const char *s, int c)
 {
-    if (!s)
+	if (!s)
 		return (NULL);
-    while (*s != (char)c)
+	while (*s != (char)c)
 	{
 		if (*s == '\0')
 			return (NULL);
 		s++;
 	}
-    return ((char *)s);
+	return ((char*)s);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
