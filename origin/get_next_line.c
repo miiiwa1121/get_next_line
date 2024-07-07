@@ -6,13 +6,48 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/07 17:43:18 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/07 18:10:41 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <fcntl.h>
 #include <stdlib.h>
+
+char	*ft_strchr(const char *s, int c)
+{
+	if (!s)
+		return (NULL);
+	while (*s != (char)c)
+	{
+		if (*s == '\0')
+			return (NULL);
+		s++;
+	}
+	return ((char*)s);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*str;
+	char	*str_tmp;
+	int		len;
+
+	len = 0;
+	if (!s1 || !s2)
+		return (NULL);
+	len = ft_strlen(s1) + ft_strlen(s2);
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (NULL);
+	str_tmp = str;
+	while (*s1)
+		*str++ = *s1++;
+	while (*s2)
+		*str++ = *s2++;
+	*str = '\0';
+	return (str_tmp);
+}
 
 char	*save_str(char *save)
 {
@@ -99,16 +134,23 @@ char	*get_line(int fd, char *save)
 
 char	*get_next_line(int fd)
 {
-	static char	*save;
+	static char	*save;//static宣言は関数が終了しても変数に値が残っている
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	save = get_line(fd, save);
+	/*fdからBUFFER_SIZE+1分のメモリを確保して、BUFFER_SIZ分ずつbuffへ読み込み、saveに追加格納する。
+	saveへの格納後時点のbuffに改行を見つけたら、saveをリターンする。*/
 	if (!save)
 		return (NULL);
 	line = extract_line(save);
+	/* 改行が含まれているsaveの、改行もしくは終端までのバイト+2分のメモリを確保して、lineとする。
+	引数saveが改行もしくは終端までの間、lineに先頭からコピーし、最後にNULLを入れて、リターンする。*/
 	save = save_str(save);
+	/* 改行が含まれているsaveの、改行もしくは終端から終端までのバイト+1分のメモリを確保して、
+	new_saveとする。引数saveが改行もしくは終端から終端までの間、new_saveに先頭からコピーし、
+	最後にNULLを入れて、リターンする。 */
 	return (line);
 }
 
