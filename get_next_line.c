@@ -6,67 +6,13 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/06 16:25:18 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/07 16:34:34 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <fcntl.h>
 #include <stdlib.h>
-
-char *read_new_line(char *s_str)//s_strから一行を抜き出して新しいメモリを確保して返す
-{
-	char *str;
-	int i;
-
-	i = 0;
-	if (!s_str[i])
-		return (NULL);
-	while(s_str[i] && s_str[i] != '\n')//終端または改行までのバイト数
-		i++;
-	str = (char *)malloc((i + 2) * sizeof(char));//s_strの改行もしくは終端までのサイズをmallocしてメモリを確保
-	if(!str)
-		return (NULL);
-	i = 0;
-	while(s_str[i] && s_str[i] != '\n')
-	{
-		str[i] = s_str[i];//strにs_strの改行もしくは終端までを代入		
-		i++;
-	}
-	if(s_str[i] == '\n')
-	{
-		str[i] = s_str[i];
-		i++;
-	}
-	str[i] = '\0';
-	return (str);
-}
-
-char *other_new_str(char *s_str)
-{
-	int i;
-	int j;
-	char *str;
-
-	i = 0;
-	j=0;
-	while(s_str[i] && s_str[i] != '\n')//終端または改行までのバイト数
-		i++;
-	if(!s_str[i])
-	{
-		free(s_str);
-		return (NULL);
-	}
-	str = (char *)malloc((ft_strlen(s_str) - i + 1) * sizeof(char));//s_strの全体-s_strの一行分のサイズ+NULLをmalloc
-	if(!str)
-		return (NULL);
-	i++;
-	while(s_str[i])//改行の次から終端もしくは改行まで
-		str[j++] = s_str[i++];//新メモリにコピー
-	str[j] = '\0';
-	free(s_str);
-	return (str);
-}
 
 char 	*read_all(int fd, char *s_str)//fdのデータをすべてs_strに格納
 {
@@ -103,7 +49,7 @@ char *get_next_line(int fd)
 	if(!s_str)
 		return (NULL);
 	line = read_new_line(s_str);//fdのデータを一行抜き出して新メモリに格納して返す。　
-	s_str = other_new_str(s_str);//read_line以外のデータを抜き出して新メモリに格納して返す
+	s_str = extra_new_str(s_str);//read_line以外のデータを抜き出して新メモリに格納して返す
 	return (line);
 }
 
