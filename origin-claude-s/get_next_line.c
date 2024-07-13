@@ -3,23 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/11 15:56:18 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/14 00:48:57 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdlib.h>
 
-#define MAX_FD 1024
-
-/* 残りの文字列を保存する関数 */
-static char	*save_str(char *save)
+static char	*get_line(int fd, char *save)
 {
-	size_t	i;
-	size_t	j;
+	char	*buff;
+	int		bytes;
+	char	*tmp;
+
+	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buff)
+		return (NULL);
+	bytes = 1;
+	while ((!save || !ft_strchr(save, '\n')) && bytes > 0)
+	{
+		bytes = read(fd, buff, BUFFER_SIZE);
+		if (bytes == -1)
+		{
+			free(buff);
+			free(save);
+			return (NULL);
+		}
+		buff[bytes] = '\0';
+		tmp = ft_strjoin(save, buff);
+		free(save);
+		save = tmp;
+		if (!save)
+		{
+			free(buff);
+			return (NULL);
+		}
+	}
+	free(buff);
+	return (save);
+}
+
+char	*save_str(char *save)
+{
+	int		i;
+	int		j;
 	char	*new_save;
 
 	i = 0;
@@ -30,7 +60,7 @@ static char	*save_str(char *save)
 		free(save);
 		return (NULL);
 	}
-	new_save = malloc(sizeof(char) * (ft_strlen(save) - i + 1));
+	new_save = malloc((ft_strlen(save) - i + 1) * sizeof(char));
 	if (!new_save)
 	{
 		free(save);
@@ -39,28 +69,23 @@ static char	*save_str(char *save)
 	i++;
 	j = 0;
 	while (save[i])
-	{
-		new_save[j] = save[i];
-		i++;
-		j++;
-	}
+		new_save[j++] = save[i++];
 	new_save[j] = '\0';
 	free(save);
 	return (new_save);
 }
 
-/* 1行を抽出する関数 */
-static char	*extract_line(char *save)
+char	*extract_line(char *save)
 {
-	size_t	i;
+	int		i;
 	char	*line;
 
-	if (!save[0])
-		return (NULL);
 	i = 0;
+	if (!save[i])
+		return (NULL);
 	while (save[i] && save[i] != '\n')
 		i++;
-	line = malloc(sizeof(char) * (i + 2));
+	line = malloc((i + 2) * sizeof(char));
 	if (!line)
 		return (NULL);
 	i = 0;
@@ -71,63 +96,30 @@ static char	*extract_line(char *save)
 	}
 	if (save[i] == '\n')
 	{
-		line[i] = '\n';
+		line[i] = save[i];
 		i++;
 	}
 	line[i] = '\0';
 	return (line);
 }
 
-/* ファイルから読み込む関数 */
-static char *get_line(int fd, char *save)
-{
-	static char buff[BUFFER_SIZE + 1];
-	ssize_t bytes;
-	char *tmp;
-
-	while (1)
-	{
-		bytes = read(fd, buff, BUFFER_SIZE);
-		if (bytes == -1)
-		{
-			free(save);
-			return (NULL);
-		}
-		if (bytes == 0)
-			break;
-		buff[bytes] = '\0';
-		tmp = ft_strjoin(save, buff);
-		if (!tmp)
-		{
-			free(save);
-			return (NULL);
-		}
-		free(save);
-		save = tmp;
-		if (ft_strchr(buff, '\n'))
-			break;
-	}
-	return (save);
-}
-
-/* メイン関数 */
 char	*get_next_line(int fd)
 {
-	static char	*save[MAX_FD];
 	char		*line;
+	static char	*save;
 
-	if (fd < 0 || fd >= MAX_FD || BUFFER_SIZE <= 0 || BUFFER_SIZE > (SIZE_MAX - 1))
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	save[fd] = get_line(fd, save[fd]);
-	if (!save[fd])
+	save = get_line(fd, save);
+	if (!save)
 		return (NULL);
-	line = extract_line(save[fd]);
+	line = extract_line(save);
 	if (!line)
 	{
-		free(save[fd]);
-		save[fd] = NULL;
+		free(save);
+		save = NULL;
 		return (NULL);
 	}
-	save[fd] = save_str(save[fd]);
+	save = save_str(save);
 	return (line);
 }

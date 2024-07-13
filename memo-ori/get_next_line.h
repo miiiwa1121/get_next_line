@@ -5,25 +5,27 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/16 10:12:35 by ajordan-          #+#    #+#             */
-/*   Updated: 2024/07/07 17:03:07 by mtsubasa         ###   ########.fr       */
+/*   Created: 2024/06/26 01:37:35 by mtsubasa          #+#    #+#             */
+/*   Updated: 2024/07/07 18:11:13 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# include <stdlib.h>
-# include <sys/types.h>
-# include <sys/uio.h>
-# include <unistd.h>
 
-char	*get_next_line(int fd);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_strchr(const char *string, int searchedChar );
+#include <unistd.h>
+#include <stdio.h>
 
-void	ft_bzero(void *s, size_t n);
-void	*ft_calloc(size_t elementCount, size_t elementSize);
+# ifndef BUFFER_SIZE
+# define BUFFER_SIZE 5
+# endif
 
-size_t	ft_strlen(const char *theString);
+char    *get_next_line(int fd);
+char    *get_line(int fd, char *s_str);
+char *extract_line(char *save);
+char *save_str(char *save);
+char *ft_strjoin(const char *s1, const char *s2);
+size_t ft_strlen(const char *str);
+char *ft_strchr(const char *s, int c);
 
 #endif

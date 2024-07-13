@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/13 23:26:14 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/13 23:14:05 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,72 +68,76 @@ char	*extract_line(char *save)
 	return (line);
 }
 
-char	*get_line(int fd, char *save)
-{
-	char	*buff;
-	int		bytes;
-	char	*tmp;
-
-	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!buff)
-		return (NULL);
-	bytes = 1;
-	while (bytes > 0)
-	{
-		bytes = read(fd, buff, BUFFER_SIZE);
-		if (bytes == -1)
-		{
-			free(buff);
-			return (NULL);
-		}
-		buff[bytes] = '\0';
-		tmp = ft_strjoin(save, buff);
-		free(save);
-		save = tmp;
-		if (ft_strchr(buff, '\n'))
-			break ;
-	}
-	free(buff);
-	return (save);
-}
-
 // char	*get_line(int fd, char *save)
 // {
-// 	static char	buff[BUFFER_SIZE + 1];
-// 	int			bytes;
-// 	char		*tmp;
+// 	char	*buff;
+// 	int		bytes;
+// 	char	*tmp;
 
-// 	while (1)
+// 	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
+// 	if (!buff)
+// 		return (NULL);
+// 	bytes = 1;
+// 	while (bytes > 0)
 // 	{
 // 		bytes = read(fd, buff, BUFFER_SIZE);
-// 		if (bytes <= 0)
-// 			break ;
-// 		buff[bytes] = '\0';
-// 		tmp = ft_strjoin(save, buff);
-// 		if (!tmp)
+// 		if (bytes == -1)
 // 		{
-// 			free(save);
+// 			free(buff);
 // 			return (NULL);
 // 		}
+// 		buff[bytes] = '\0';
+// 		tmp = ft_strjoin(save, buff);
 // 		free(save);
 // 		save = tmp;
 // 		if (ft_strchr(buff, '\n'))
 // 			break ;
 // 	}
+// 	free(buff);
 // 	return (save);
 // }
 
+char	*get_line(int fd, char *save)
+{
+	static char	buff[BUFFER_SIZE + 1];
+	int			bytes;
+	char		*tmp;
+
+	while (1)
+	{
+		bytes = read(fd, buff, BUFFER_SIZE);
+		if (bytes <= 0)
+			break ;
+		buff[bytes] = '\0';
+		tmp = ft_strjoin(save, buff);
+		if (!tmp)
+		{
+			free(save);
+			return (NULL);
+		}
+		free(save);
+		save = tmp;
+		if (ft_strchr(buff, '\n'))
+			break ;
+	}
+	return (save);
+}
+
 char	*get_next_line(int fd)
 {
-	char		*line;
-	static char	*save;
+	char	*line;
 
+	static char *save; // static宣言は関数が終了しても変数に値が残っている
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	save = get_line(fd, save);
+	/*fdからBUFFER_SIZE+1分のメモリを確保して、BUFFER_SIZ分ずつbuffへ読み込み、saveに追加格納する。
+	saveへの格納後時点のbuffに改行を見つけたら、saveをリターンする。*/
 	if (!save)
 		return (NULL);
 	line = extract_line(save);
+	/* 改行が含まれているsaveの、改行もしくは終端までのバイト+2分のメモリを確保して、lineとする。
+	引数saveが改行もしくは終端までの間、lineに先頭からコピーし、最後にNULLを入れて、リターンする。*/
 	if (!line)
 	{
 		free(save);
@@ -141,6 +145,9 @@ char	*get_next_line(int fd)
 		return (NULL);
 	}
 	save = save_str(save);
+	/* 改行が含まれているsaveの、改行もしくは終端から終端までのバイト+1分のメモリを確保して、
+	new_saveとする。引数saveが改行もしくは終端から終端までの間、new_saveに先頭からコピーし、
+	最後にNULLを入れて、リターンする。 */
 	return (line);
 }
 

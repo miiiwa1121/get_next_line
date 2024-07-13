@@ -6,12 +6,11 @@
 /*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/13 23:26:14 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/14 00:44:11 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <fcntl.h>
 #include <stdlib.h>
 
 char	*save_str(char *save)
@@ -30,7 +29,10 @@ char	*save_str(char *save)
 	}
 	new_save = malloc((ft_strlen(save) - i + 1) * sizeof(char));
 	if (!new_save)
+	{
+		free(save);
 		return (NULL);
+	}
 	i++;
 	j = 0;
 	while (save[i])
@@ -68,7 +70,7 @@ char	*extract_line(char *save)
 	return (line);
 }
 
-char	*get_line(int fd, char *save)
+static char	*get_line(int fd, char *save)
 {
 	char	*buff;
 	int		bytes;
@@ -78,50 +80,23 @@ char	*get_line(int fd, char *save)
 	if (!buff)
 		return (NULL);
 	bytes = 1;
-	while (bytes > 0)
+	while ((!save || !ft_strchr(save, '\n')) && bytes > 0)
 	{
 		bytes = read(fd, buff, BUFFER_SIZE);
 		if (bytes == -1)
 		{
 			free(buff);
+			free(save);
 			return (NULL);
 		}
 		buff[bytes] = '\0';
 		tmp = ft_strjoin(save, buff);
 		free(save);
 		save = tmp;
-		if (ft_strchr(buff, '\n'))
-			break ;
 	}
 	free(buff);
 	return (save);
 }
-
-// char	*get_line(int fd, char *save)
-// {
-// 	static char	buff[BUFFER_SIZE + 1];
-// 	int			bytes;
-// 	char		*tmp;
-
-// 	while (1)
-// 	{
-// 		bytes = read(fd, buff, BUFFER_SIZE);
-// 		if (bytes <= 0)
-// 			break ;
-// 		buff[bytes] = '\0';
-// 		tmp = ft_strjoin(save, buff);
-// 		if (!tmp)
-// 		{
-// 			free(save);
-// 			return (NULL);
-// 		}
-// 		free(save);
-// 		save = tmp;
-// 		if (ft_strchr(buff, '\n'))
-// 			break ;
-// 	}
-// 	return (save);
-// }
 
 char	*get_next_line(int fd)
 {
@@ -134,38 +109,6 @@ char	*get_next_line(int fd)
 	if (!save)
 		return (NULL);
 	line = extract_line(save);
-	if (!line)
-	{
-		free(save);
-		save = NULL;
-		return (NULL);
-	}
 	save = save_str(save);
 	return (line);
 }
-
-// #include <stdio.h>
-
-// int main(void)
-// {
-//     int fd;
-//     int i;
-//     char *line;
-//     const char *filename = "text1.txt";
-
-//     i = 0;
-//     fd = open(filename, O_RDWR);
-//     if (fd < 0)
-//     {
-//         printf("openエラー\n");
-//         return (1);
-//     }
-//     while ((line = get_next_line(fd)) != NULL && i < 7)
-//     {
-//         printf("line [%d]: %s\n", i, line);
-//         free(line);
-//         i++;
-//     }
-//     close(fd);
-//     return (0);
-// }
