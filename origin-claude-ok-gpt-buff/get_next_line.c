@@ -6,11 +6,12 @@
 /*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/14 01:10:31 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/14 01:24:23 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h> // デバッグ用に追加
 #include <stdlib.h>
 
 char	*save_str(char *save)
@@ -90,6 +91,7 @@ static char	*get_line(int fd, char *save)
 			return (NULL);
 		}
 		buff[bytes] = '\0';
+		printf("Buffer read: %s\n", buff); // デバッグ出力
 		tmp = ft_strjoin(save, buff);
 		free(save);
 		save = tmp;
