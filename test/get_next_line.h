@@ -5,26 +5,26 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/16 10:12:35 by ajordan-          #+#    #+#             */
-/*   Updated: 2024/07/07 16:54:46 by mtsubasa         ###   ########.fr       */
+/*   Created: 2024/06/26 01:37:35 by mtsubasa          #+#    #+#             */
+/*   Updated: 2024/07/07 16:37:26 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# include <stdlib.h>
+#include <stdio.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
+# define BUFFER_SIZE 1000
 # endif
 
-char	*get_next_line(int fd);
-char	*ft_read_to_left_str(int fd, char *left_str);
-char	*ft_strchr(char *s, int c);
-char	*ft_strjoin(char *left_str, char *buff);
-size_t	ft_strlen(char *s);
-char	*ft_get_line(char *left_str);
-char	*ft_new_left_str(char *left_str);
+char *get_next_line(int fd);
+char *read_all(int fd, char *s_str);
+char *ft_strchr(char *s, int c);
+char *ft_strjoin(char *s1, char *s2);
+size_t ft_strlen(char *str);
+char *read_new_line(char *s_str);
+char *extra_new_str(char *s_str);
 
 #endif
