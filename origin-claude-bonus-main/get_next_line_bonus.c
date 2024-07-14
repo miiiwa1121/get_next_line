@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/14 14:19:24 by mtsubasa         ###   ########.fr       */
+/*   Created: 2024/07/14 01:30:00 by mtsubasa          #+#    #+#             */
+/*   Updated: 2024/07/14 14:25:48 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 #include <stdlib.h>
+#include <limits.h>
 
 char	*save_str(char *save)
 {
@@ -27,7 +28,7 @@ char	*save_str(char *save)
 		free(save);
 		return (NULL);
 	}
-	new_save = malloc((ft_strlen(save) - i) * sizeof(char));
+	new_save = malloc((ft_strlen(save) - i + 1) * sizeof(char));
 	if (!new_save)
 	{
 		free(save);
@@ -52,7 +53,7 @@ char	*extract_line(char *save)
 		return (NULL);
 	while (save[i] && save[i] != '\n')
 		i++;
-	line = malloc((i + 1 + (save[i] == '\n')) * sizeof(char));
+	line = malloc((i + 2) * sizeof(char));
 	if (!line)
 		return (NULL);
 	i = 0;
@@ -62,7 +63,10 @@ char	*extract_line(char *save)
 		i++;
 	}
 	if (save[i] == '\n')
-		line[i++] = '\n';
+	{
+		line[i] = save[i];
+		i++;
+	}
 	line[i] = '\0';
 	return (line);
 }
@@ -98,21 +102,14 @@ static char	*get_line(int fd, char *save)
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*save;
+	static char	*save[OPEN_MAX];
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > OPEN_MAX)
 		return (NULL);
-	save = get_line(fd, save);
-	if (!save)
+	save[fd] = get_line(fd, save[fd]);
+	if (!save[fd])
 		return (NULL);
-	line = extract_line(save);
-	save = save_str(save);
-	if (!line || (line[0] == '\0' && !save))
-	{
-		free(line);
-		free(save);
-		save = NULL;
-		return (NULL);
-	}
+	line = extract_line(save[fd]);
+	save[fd] = save_str(save[fd]);
 	return (line);
 }

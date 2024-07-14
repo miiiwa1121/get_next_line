@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/14 04:16:11 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/14 15:20:53 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)//無効なファイルディスクリプタ || BUFFER_SIZEが0以下
 		return (NULL);
-	save = get_line(fd, save);//一行ぴったりもしくは、改行を含む文字列がsaveへ格納される 
+	save = get_line(fd, save);//fdから一行ぴったりもしくは、改行を含む文字列がsaveへ格納される 
 	/*fdからBUFFER_SIZE+1分のメモリを確保して、
 	saveが何も読み込んでないまたは、saveに改行が見るからないそして、read読み込みに失敗していない間、
 	BUFFER_SIZ分ずつbuffへ読み込み、saveに追加格納する。

@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/14 14:19:24 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/14 01:10:31 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*save_str(char *save)
 		free(save);
 		return (NULL);
 	}
-	new_save = malloc((ft_strlen(save) - i) * sizeof(char));
+	new_save = malloc((ft_strlen(save) - i + 1) * sizeof(char));
 	if (!new_save)
 	{
 		free(save);
@@ -52,7 +52,7 @@ char	*extract_line(char *save)
 		return (NULL);
 	while (save[i] && save[i] != '\n')
 		i++;
-	line = malloc((i + 1 + (save[i] == '\n')) * sizeof(char));
+	line = malloc((i + 2) * sizeof(char));
 	if (!line)
 		return (NULL);
 	i = 0;
@@ -62,7 +62,10 @@ char	*extract_line(char *save)
 		i++;
 	}
 	if (save[i] == '\n')
-		line[i++] = '\n';
+	{
+		line[i] = save[i];
+		i++;
+	}
 	line[i] = '\0';
 	return (line);
 }
@@ -107,12 +110,5 @@ char	*get_next_line(int fd)
 		return (NULL);
 	line = extract_line(save);
 	save = save_str(save);
-	if (!line || (line[0] == '\0' && !save))
-	{
-		free(line);
-		free(save);
-		save = NULL;
-		return (NULL);
-	}
 	return (line);
 }
