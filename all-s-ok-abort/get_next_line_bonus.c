@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/15 14:17:38 by mtsubasa         ###   ########.fr       */
+/*   Created: 2024/07/14 01:30:00 by mtsubasa          #+#    #+#             */
+/*   Updated: 2024/07/15 14:52:42 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdlib.h>
+#include <limits.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 char	*save_str(char *save)
 {
@@ -117,15 +118,15 @@ static char	*get_line(int fd, char *save)
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*save;
+	static char	*save[OPEN_MAX];
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	save = get_line(fd, save);
-	if (!save)
+	save[fd] = get_line(fd, save[fd]);
+	if (!save[fd])
 		return (NULL);
-	line = extract_line(&save);
-	if (save)
-		save = save_str(save);
+	line = extract_line(&save[fd]);
+	if (save[fd])
+		save[fd] = save_str(save[fd]);
 	return (line);
 }
