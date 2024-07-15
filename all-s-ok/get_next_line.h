@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:37:35 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/14 00:40:42 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/15 14:46:17 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # endif
 
 char	*get_next_line(int fd);
-char	*extract_line(char *save);
+char	*extract_line(char **save);
 char	*save_str(char *save);
 char	*ft_strjoin(const char *s1, const char *s2);
 size_t	ft_strlen(const char *str);

@@ -6,12 +6,13 @@
 /*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/14 01:10:31 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/15 14:17:38 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 char	*save_str(char *save)
 {
@@ -42,28 +43,36 @@ char	*save_str(char *save)
 	return (new_save);
 }
 
-char	*extract_line(char *save)
+char	*extract_line(char **save)
 {
 	int		i;
 	char	*line;
+	int		flag;
 
 	i = 0;
-	if (!save[i])
+	flag = 0;
+	if (!(*save)[i])
 		return (NULL);
-	while (save[i] && save[i] != '\n')
+	if (ft_strchr(*save, '\n'))
+		flag = 1;
+	while ((*save)[i] && (*save)[i] != '\n')
 		i++;
-	line = malloc((i + 2) * sizeof(char));
+	line = malloc((i + 1 + flag) * sizeof(char));
 	if (!line)
-		return (NULL);
-	i = 0;
-	while (save[i] && save[i] != '\n')
 	{
-		line[i] = save[i];
+		free(*save);
+		*save = NULL;
+		return (NULL);
+	}
+	i = 0;
+	while ((*save)[i] && (*save)[i] != '\n')
+	{
+		line[i] = (*save)[i];
 		i++;
 	}
-	if (save[i] == '\n')
+	if ((*save)[i] == '\n')
 	{
-		line[i] = save[i];
+		line[i] = (*save)[i];
 		i++;
 	}
 	line[i] = '\0';
@@ -78,7 +87,11 @@ static char	*get_line(int fd, char *save)
 
 	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buff)
+	{
+		if (save)
+			free(save);
 		return (NULL);
+	}
 	bytes = 1;
 	while ((!save || !ft_strchr(save, '\n')) && bytes > 0)
 	{
@@ -86,9 +99,12 @@ static char	*get_line(int fd, char *save)
 		if (bytes == -1)
 		{
 			free(buff);
-			free(save);
+			if (save)
+				free(save);
 			return (NULL);
 		}
+		if (bytes == 0)
+			break ;
 		buff[bytes] = '\0';
 		tmp = ft_strjoin(save, buff);
 		free(save);
@@ -108,7 +124,8 @@ char	*get_next_line(int fd)
 	save = get_line(fd, save);
 	if (!save)
 		return (NULL);
-	line = extract_line(save);
-	save = save_str(save);
+	line = extract_line(&save);
+	if (save)
+		save = save_str(save);
 	return (line);
 }
