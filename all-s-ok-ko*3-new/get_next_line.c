@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/14 01:30:00 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/20 15:51:21 by mtsubasa         ###   ########.fr       */
+/*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
+/*   Updated: 2024/07/15 18:18:53 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -51,9 +50,8 @@ char	*extract_line(char **save)
 	line = malloc((i + 1 + flag) * sizeof(char));
 	if (!line)
 	{
-		if (*save)
-			free(*save);
-		// *save = NULL;
+		free(*save);
+		*save = NULL;
 		return (NULL);
 	}
 	line = supp_extract_line(save, line);
@@ -68,15 +66,8 @@ static char	*supp_get_line(int fd, char *save, char *buff)
 	while (!save || !ft_strchr(save, '\n'))
 	{
 		bytes = read(fd, buff, BUFFER_SIZE);
-		// if (bytes == -1)
-		// {
-		// 	free(save);
-		// 	return (NULL);
-		// }
-		// if (bytes == 0)
-		// 	break ;
-		/* if (bytes <= 0)
-			break ; */
+		if (bytes <= 0)
+			break ;
 		buff[bytes] = '\0';
 		tmp = ft_strjoin(save, buff);
 		if (!tmp)
@@ -86,8 +77,8 @@ static char	*supp_get_line(int fd, char *save, char *buff)
 		}
 		free(save);
 		save = tmp;
-		/* // if (ft_strchr(save, '\n'))
-		// 	break ; */
+		if (ft_strchr(save, '\n'))
+			break ;
 	}
 	return (save);
 }
@@ -113,16 +104,15 @@ static char	*get_line(int fd, char *save)
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*save[OPEN_MAX];
+	static char	*save;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-
-	save[fd] = get_line(fd, save[fd]);
-	if (!save[fd])
+	save = get_line(fd, save);
+	if (!save)
 		return (NULL);
-	line = extract_line(&save[fd]);
-	if (save[fd])
-		save[fd] = save_str(save[fd]);
+	line = extract_line(&save);
+	if (save)
+		save = save_str(save);
 	return (line);
 }

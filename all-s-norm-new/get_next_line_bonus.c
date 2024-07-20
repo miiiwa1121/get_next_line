@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 01:30:00 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/17 12:57:29 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/20 17:53:04 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char	*save_str(char *save)
+/* char	*save_str(char *save)
 {
 	int		i;
 	int		j;
@@ -43,7 +43,8 @@ char	*save_str(char *save)
 	free(save);
 	return (new_save);
 }
-
+ */
+ 
 char	*extract_line(char **save)
 {
 	int		i;
@@ -54,8 +55,8 @@ char	*extract_line(char **save)
 	flag = 0;
 	if (!(*save)[i])
 		return (NULL);
-	if (ft_strchr(*save, '\n'))
-		flag = 1;
+/* 	if (ft_strchr(*save, '\n'))
+		flag = 1;*/	
 	while ((*save)[i] && (*save)[i] != '\n')
 		i++;
 	line = malloc((i + 1 + flag) * sizeof(char));
@@ -80,19 +81,15 @@ char	*extract_line(char **save)
 	return (line);
 }
 
-static char	*get_line(int fd, char *save)
+static char	*get_file(int fd, char *save)
 {
 	char	*buff;
-	int		bytes;
 	char	*tmp;
+	int		bytes;
 
 	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buff)
-	{
-		if (save)
-			free(save);
 		return (NULL);
-	}
 	bytes = 1;
 	while ((!save || !ft_strchr(save, '\n')) && bytes > 0)
 	{
@@ -104,12 +101,15 @@ static char	*get_line(int fd, char *save)
 				free(save);
 			return (NULL);
 		}
-		if (bytes == 0)
-			break ;
+		/* if (bytes == 0)
+			break ; */
 		buff[bytes] = '\0';
-		tmp = ft_strjoin(save, buff);
+		tmp = save;
+		save = ft_strjoin(save, buffer);
+		free(tmp);
+		/* tmp = ft_strjoin(save, buff);
 		free(save);
-		save = tmp;
+		save = tmp; */
 	}
 	free(buff);
 	return (save);
@@ -122,11 +122,20 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	save[fd] = get_line(fd, save[fd]);
+	save[fd] = get_file(fd, save[fd]);
 	if (!save[fd])
+	{
+		free(save);
+		save = NULL;
 		return (NULL);
+	}
 	line = extract_line(&save[fd]);
-	if (save[fd])
-		save[fd] = save_str(save[fd]);
+	if (line == NULL)
+	{
+		free(save);
+		save = NULL;
+	}
+/* 	if (save[fd])
+		save[fd] = save_str(save[fd]); */
 	return (line);
 }

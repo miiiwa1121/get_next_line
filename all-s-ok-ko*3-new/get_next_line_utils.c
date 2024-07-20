@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/14 01:30:00 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/20 14:40:45 by mtsubasa         ###   ########.fr       */
+/*   Created: 2024/06/26 01:38:01 by mtsubasa          #+#    #+#             */
+/*   Updated: 2024/07/15 18:08:17 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 #include <stdlib.h>
 
 size_t	ft_strlen(const char *str)
@@ -44,19 +44,15 @@ char	*ft_strdup(const char *s)
 {
 	char	*dup;
 	size_t	len;
-	// char *start;
 
 	len = ft_strlen(s);
 	dup = (char *)malloc(len + 1);
 	if (!dup)
 		return (NULL);
-	// start = dup;
 	while (*s)
 		*dup++ = *s++;
 	*dup = '\0';
-	// free(dup);//関数内でfreeできるようにする
-	/* return (dup - len); */
-	// return (start);
+	return (dup - len);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
@@ -76,12 +72,14 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	i = 0;
 	while (s1[i])
-		result[i++] = s1[i++];
+	{
+		result[i] = s1[i];
+		i++;
+	}
 	j = 0;
 	while (s2[j])
 		result[i++] = s2[j++];
 	result[i] = '\0';
-	// free(result);//関数内でfreeできるようにする
 	return (result);
 }
 
