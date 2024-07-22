@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/22 18:06:52 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/22 20:14:15 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,16 @@ static char	*supp_get_line(int fd, char **save, char *buff)
 	while (!*save || !ft_strchr(*save, '\n'))
 	{
 		bytes = read(fd, buff, BUFFER_SIZE);
-		if (bytes <= 0)
+		if (bytes == -1)
+		{
+			if (*save)
+			{
+				free(*save);
+				*save = NULL;
+			}
+			return (NULL);
+		}
+		if (bytes == 0)
 			break ;
 		buff[bytes] = '\0';
 		tmp = ft_strjoin(*save, buff);
