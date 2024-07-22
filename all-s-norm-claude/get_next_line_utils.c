@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/14 01:30:00 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/22 16:54:54 by mtsubasa         ###   ########.fr       */
+/*   Created: 2024/06/26 01:38:01 by mtsubasa          #+#    #+#             */
+/*   Updated: 2024/07/14 01:10:39 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 #include <stdlib.h>
 
 size_t	ft_strlen(const char *str)
@@ -81,33 +81,4 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		result[i++] = s2[j++];
 	result[i] = '\0';
 	return (result);
-}
-
-char	*save_str(char *save)
-{
-	int		i;
-	int		j;
-	char	*new_save;
-
-	i = 0;
-	while (save[i] && save[i] != '\n')
-		i++;
-	if (!save[i])
-	{
-		free(save);
-		return (NULL);
-	}
-	new_save = malloc((ft_strlen(save) - i + 1) * sizeof(char));
-	if (!new_save)
-	{
-		free(save);
-		return (NULL);
-	}
-	i++;
-	j = 0;
-	while (save[i])
-		new_save[j++] = save[i++];
-	new_save[j] = '\0';
-	free(save);
-	return (new_save);
 }

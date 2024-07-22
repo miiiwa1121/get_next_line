@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 01:30:00 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/22 16:51:51 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:40:12 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ char	*extract_line(char **save)
 	{
 		if (*save)
 			free(*save);
+		*save = NULL;
 		return (NULL);
 	}
 	line = supp_extract_line(save, line);
@@ -67,6 +68,13 @@ static char	*supp_get_line(int fd, char *save, char *buff)
 	while (!save || !ft_strchr(save, '\n'))
 	{
 		bytes = read(fd, buff, BUFFER_SIZE);
+		if (bytes == -1)
+		{
+			free(save);
+			return (NULL);
+		}
+		if (bytes == 0)
+			break ;
 		buff[bytes] = '\0';
 		tmp = ft_strjoin(save, buff);
 		if (!tmp)
@@ -105,6 +113,7 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
+
 	save[fd] = get_line(fd, save[fd]);
 	if (!save[fd])
 		return (NULL);

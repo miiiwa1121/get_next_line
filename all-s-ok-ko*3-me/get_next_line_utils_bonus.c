@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 01:30:00 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/22 16:54:54 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:48:13 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,18 @@ char	*ft_strdup(const char *s)
 {
 	char	*dup;
 	size_t	len;
+	char	*start;
 
 	len = ft_strlen(s);
 	dup = (char *)malloc(len + 1);
 	if (!dup)
 		return (NULL);
+	start = dup;
 	while (*s)
 		*dup++ = *s++;
 	*dup = '\0';
-	return (dup - len);
+	free(dup);
+	return (start);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
@@ -72,14 +75,12 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	i = 0;
 	while (s1[i])
-	{
-		result[i] = s1[i];
-		i++;
-	}
+		result[i++] = s1[i++];
 	j = 0;
 	while (s2[j])
 		result[i++] = s2[j++];
 	result[i] = '\0';
+	free(result);
 	return (result);
 }
 
