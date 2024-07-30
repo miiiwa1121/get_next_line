@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/22 20:14:15 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/30 19:39:12 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,8 @@ static char	*supp_get_line(int fd, char **save, char *buff)
 		bytes = read(fd, buff, BUFFER_SIZE);
 		if (bytes == -1)
 		{
-			if (*save)
-			{
-				free(*save);
-				*save = NULL;
-			}
+			free(*save);
+			*save = NULL;
 			return (NULL);
 		}
 		if (bytes == 0)
@@ -86,8 +83,8 @@ static char	*supp_get_line(int fd, char **save, char *buff)
 		}
 		free(*save);
 		*save = tmp;
-		if (ft_strchr(*save, '\n'))
-			break ;
+		// if (ft_strchr(*save, '\n'))
+		// 	break ;
 	}
 	return (*save);
 }

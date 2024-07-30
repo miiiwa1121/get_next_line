@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 01:30:00 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/30 17:10:57 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/30 19:35:05 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ static char	*supp_get_line(int fd, char **save, char *buff)
 		}
 		free(*save);
 		*save = tmp;
-		if (ft_strchr(*save, '\n'))
-			break ;
+		// if (ft_strchr(*save, '\n'))
+		// 	break ;
 	}
 	return (*save);
 }

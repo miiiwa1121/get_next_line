@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 01:30:00 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/30 18:06:45 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/30 19:29:15 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static char	*supp_extract_line(char **save, char *line)
 	return (line);
 }
 
-char	*extract_line(char **save)
+static char	*extract_line(char **save)
 {
 	int		i;
 	char	*line;
@@ -59,43 +59,51 @@ char	*extract_line(char **save)
 	return (line);
 }
 
-static char	*supp_get_line(int fd, char *save, char *buff)
+static char	*supp_get_line(int fd, char **save, char *buff)
 {
 	int		bytes;
 	char	*tmp;
 
-	while (!save || !ft_strchr(save, '\n'))
+	while (!*save || !ft_strchr(*save, '\n'))
 	{
 		bytes = read(fd, buff, BUFFER_SIZE);
-		buff[bytes] = '\0';
-		tmp = ft_strjoin(save, buff);
-		if (!tmp)
+		if (bytes == -1)
 		{
-			free(save);
+			free(*save);
+			*save = NULL;
 			return (NULL);
 		}
-		free(save);
-		save = tmp;
+		if (bytes == 0)
+			break ;
+		buff[bytes] = '\0';
+		tmp = ft_strjoin(*save, buff);
+		if (!tmp)
+		{
+			free(*save);
+			return (NULL);
+		}
+		free(*save);
+		*save = tmp;
 	}
-	return (save);
+	return (*save);
 }
 
-static char	*get_line(int fd, char *save)
+static char	*get_line(int fd, char **save)
 {
 	char	*buff;
 
 	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buff)
 	{
-		if (save)
-			free(save);
+		if (*save)
+			free(*save);
 		return (NULL);
 	}
-	save = supp_get_line(fd, save, buff);
+	*save = supp_get_line(fd, save, buff);
 	free(buff);
-	if (!save)
+	if (!*save)
 		return (NULL);
-	return (save);
+	return (*save);
 }
 
 char	*get_next_line(int fd)
@@ -105,7 +113,7 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	save[fd] = get_line(fd, save[fd]);
+	save[fd] = get_line(fd, &save[fd]);
 	if (!save[fd])
 		return (NULL);
 	line = extract_line(&save[fd]);
