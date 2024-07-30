@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/14 01:30:00 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/30 17:10:57 by mtsubasa         ###   ########.fr       */
+/*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
+/*   Updated: 2024/07/22 20:14:15 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -69,8 +68,11 @@ static char	*supp_get_line(int fd, char **save, char *buff)
 		bytes = read(fd, buff, BUFFER_SIZE);
 		if (bytes == -1)
 		{
-			free(*save);
-			*save = NULL;
+			if (*save)
+			{
+				free(*save);
+				*save = NULL;
+			}
 			return (NULL);
 		}
 		if (bytes == 0)
@@ -111,15 +113,15 @@ static char	*get_line(int fd, char **save)
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*save[FOPEN_MAX];
+	static char	*save;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	save[fd] = get_line(fd, &save[fd]);
-	if (!save[fd])
+	save = get_line(fd, &save);
+	if (!save)
 		return (NULL);
-	line = extract_line(&save[fd]);
-	if (save[fd])
-		save[fd] = save_str(save[fd]);
+	line = extract_line(&save);
+	if (save)
+		save = save_str(save);
 	return (line);
 }
