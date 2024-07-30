@@ -1,17 +1,29 @@
+/* main.c (ノンボーナス版) */
 #include "get_next_line.h"
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <fcntl.h>
-#include <unistd.h>
+#include <stdio.h>
 
-int main()
+int main(void)
 {
-	int fd = open("/Users/mtsubasa/francinette/tests/get_next_line/fsoares/1char.txt",  O_RDWR);
-	char *line = get_next_line(fd);
-	printf("%lu %s\n", strlen(line), line);
-	line = get_next_line(fd);
-	printf("%lu %s\n", strlen(line), line);
-	line = get_next_line(fd);
-	printf("%lu %s\n", strlen(line), line);
+    int fd;
+    char *line;
+
+    // 単一のファイルを開く
+    fd = open("test.txt", O_RDONLY);
+    if (fd < 0)
+    {
+        printf("Error opening file\n");
+        return (1);
+    }
+
+    // ファイルから行を読み取り、表示する
+    printf("Reading from test.txt:\n");
+    while ((line = get_next_line(fd)) != NULL)
+    {
+        printf("%s", line);
+        free(line);
+    }
+
+    close(fd);
+    return (0);
 }

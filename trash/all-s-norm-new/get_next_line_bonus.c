@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 01:30:00 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/22 16:23:54 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/30 18:51:32 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static char	*get_file(int fd, char *save)
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*save[OPEN_MAX];
+	static char	*save[FOPEN_MAX];
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);

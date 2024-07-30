@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 01:30:00 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/22 16:48:13 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/30 18:44:10 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,10 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	i = 0;
 	while (s1[i])
-		result[i++] = s1[i++];
+	{
+		result[i] = s1[i];
+		i++;
+	}
 	j = 0;
 	while (s2[j])
 		result[i++] = s2[j++];

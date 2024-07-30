@@ -2,6 +2,7 @@
 #include "get_next_line.h"
 #include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(void)
 {
@@ -9,7 +10,7 @@ int main(void)
     char *line;
 
     // 単一のファイルを開く
-    fd = open("test.txt", O_RDONLY);
+    fd = open("test1.txt", O_RDONLY);
     if (fd < 0)
     {
         printf("Error opening file\n");

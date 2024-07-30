@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtsubasa <mtsubasa@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 01:36:59 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/07/22 20:14:15 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/07/30 16:53:23 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 static char	*supp_extract_line(char **save, char *line)
 {
