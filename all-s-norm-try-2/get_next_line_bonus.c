@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/14 01:30:00 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/08/01 23:19:16 by mtsubasa         ###   ########.fr       */
+/*   Created: 2024/08/01 23:23:39 by mtsubasa          #+#    #+#             */
+/*   Updated: 2024/08/01 23:25:34 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static char	*supp_extract_line(char **save, char *line)
+static char	*supp_extract_line(char *save, char *line)
 {
 	int	i;
 
 	i = 0;
-	while ((*save)[i] && (*save)[i] != '\n')
+	while (save[i] && save[i] != '\n')
 	{
-		line[i] = (*save)[i];
+		line[i] = save[i];
 		i++;
 	}
-	if ((*save)[i] == '\n')
+	if (save[i] == '\n')
 	{
-		line[i] = (*save)[i];
+		line[i] = save[i];
 		i++;
 	}
 	line[i] = '\0';
 	return (line);
 }
 
-static char	*extract_line(char **save)
+static char	*extract_line(char *save)
 {
 	int		i;
 	char	*line;
@@ -42,70 +42,66 @@ static char	*extract_line(char **save)
 
 	i = 0;
 	flag = 0;
-	if (!(*save)[i])
+	if (!save[i])
 		return (NULL);
-	if (ft_strchr(*save, '\n'))
+	if (ft_strchr(save, '\n'))
 		flag = 1;
-	while ((*save)[i] && (*save)[i] != '\n')
+	while (save[i] && save[i] != '\n')
 		i++;
 	line = malloc((i + 1 + flag) * sizeof(char));
 	if (!line)
 	{
-		free(*save);
-		*save = NULL;
+		free(save);
 		return (NULL);
 	}
 	line = supp_extract_line(save, line);
 	return (line);
 }
 
-static char	*supp_get_line(int fd, char **save, char *buff)
+static char	*supp_get_line(int fd, char *save, char *buff)
 {
 	int		bytes;
 	char	*tmp;
 
-	while (!*save || !ft_strchr(*save, '\n'))
+	while (!save || !ft_strchr(save, '\n'))
 	{
 		bytes = read(fd, buff, BUFFER_SIZE);
 		if (bytes == -1)
 		{
-			free(*save);
-			*save = NULL;
+			free(save);
 			return (NULL);
 		}
 		if (bytes == 0)
 			break ;
 		buff[bytes] = '\0';
-		tmp = ft_strjoin(*save, buff);
+		tmp = ft_strjoin(save, buff);
 		if (!tmp)
 		{
-			free(*save);
+			free(save);
 			return (NULL);
 		}
-		free(*save);
-		*save = tmp;
-		// if (ft_strchr(*save, '\n'))
-		// 	break ;
+		free(save);
+		save = tmp;
 	}
-	return (*save);
+	return (save);
 }
 
-static char	*get_line(int fd, char **save)
+static char	*get_line(int fd, char *save)
 {
 	char	*buff;
 
 	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buff)
 	{
-		if (*save)
-			free(*save);
+		if (save)
+			free(save);
 		return (NULL);
 	}
-	*save = supp_get_line(fd, save, buff);
+	save = supp_get_line(fd, save, buff);
 	free(buff);
-	if (!*save)
+	if (!save)
 		return (NULL);
-	return (*save);
+	return (save);
 }
 
 char	*get_next_line(int fd)
@@ -115,10 +111,10 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	save[fd] = get_line(fd, &save[fd]);
+	save[fd] = get_line(fd, save[fd]);
 	if (!save[fd])
 		return (NULL);
-	line = extract_line(&save[fd]);
+	line = extract_line(save[fd]);
 	if (save[fd])
 		save[fd] = save_str(save[fd]);
 	return (line);
