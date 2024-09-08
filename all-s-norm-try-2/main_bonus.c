@@ -21,7 +21,7 @@ int main(void)
     }
 
     // 5回のラウンドでファイルから読み取りを行う
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 20; i++)
     {
         printf("--- Round %d ---\n", i + 1);
 
@@ -42,7 +42,6 @@ int main(void)
 
         printf("\n");
     }
-
     // 開いたファイルをすべて閉じる
     close(fd1);
     close(fd2);
