@@ -6,63 +6,13 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 02:15:30 by mtsubasa          #+#    #+#             */
-/*   Updated: 2024/09/12 04:46:41 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/09/22 17:35:58 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "get_next_line.h"
 #include <stddef.h>
 #include <stdlib.h>
-#include "libft.h"
-
-size_t	ft_strlen(const char *str)
-{
-	size_t	count;
-
-	count = 0;
-	while (*str != '\0')
-	{
-		str++;
-		count++;
-	}
-	return (count);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	char	ch;
-
-	ch = (char)c;
-	while (1)
-	{
-		if (*s == ch)
-			return ((char *)s);
-		if (*s == '\0')
-			return (NULL);
-		s++;
-	}
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	char	*str;
-	int		len;
-
-	len = 0;
-	if (!s1 || !s2)
-		return (NULL);
-	str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!str)
-	{
-		free(str);
-		return (NULL);
-	}
-	while (*s1)
-		*str++ = *s1++;
-	while (*s2)
-		*str++ = *s2++;
-	*str = '\0';
-	return (str);
-}
 
 char	*save_str(char *save)
 {
@@ -90,12 +40,11 @@ char	*save_str(char *save)
 	return (new_save);
 }
 
-char	*get_line(int fd,char*save)
+char	*get_line(int fd, char *save)
 {
 	char	*buff;
 	int		bytes;
 	char	*tmp;
-
 
 	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buff)
@@ -117,10 +66,9 @@ char	*get_line(int fd,char*save)
 	return (save);
 }
 
-
 char	*get_next_line(int fd)
 {
-	char	*line;
+	char		*line;
 	static char	*save;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
