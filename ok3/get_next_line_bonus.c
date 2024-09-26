@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 11:09:06 by jdecorte          #+#    #+#             */
-/*   Updated: 2024/09/26 17:17:35 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/09/26 17:25:58 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*read_file(int fd, char *save)
 	while (bytes > 0)//読み込んだバイト数が正の間
 	{
 		bytes = read(fd, buff, BUFFER_SIZE);
-		// printf("@@@@@@@@@@%d@@@@@@@@@@\n",bytes);
+		printf("@@@@@@@@@@%d@@@@@@@@@@\n",bytes);
 		if (bytes == -1)
 		{
 			free(buff);
@@ -90,7 +90,7 @@ char	*read_file(int fd, char *save)
 		if (ft_strchr(buff, '\n'))//文字を含まない改行を見つけたら
 			break ;
 	}
-	// printf("*************%d**************\n",bytes);
+	printf("*************%d**************\n",bytes);
 	free(buff);
 	return (save);
 }
