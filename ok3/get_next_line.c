@@ -6,12 +6,12 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 11:09:06 by jdecorte          #+#    #+#             */
-/*   Updated: 2024/09/25 20:35:47 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/09/26 17:12:04 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
+// #include <stdio.h>
 
 char	*join_free(char *save, char *buff)
 {
