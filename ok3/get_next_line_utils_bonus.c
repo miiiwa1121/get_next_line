@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 11:14:11 by jdecorte          #+#    #+#             */
-/*   Updated: 2024/09/26 17:25:06 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/09/27 14:05:11 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,19 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (result);
 }
 
-// void	ft_bzero(void *s, size_t n)//どんな型で渡されても汎用的に動作するために、void* 型で受け取る
-// {
-// 	char	*str;
-// 	size_t	i;
+void	ft_bzero(void *s, size_t n)//どんな型で渡されても汎用的に動作するために、void* 型で受け取る
+{
+	char	*str;
+	size_t	i;
 
-// 	str = (char *)s;
-// 	i = 0;
-// 	while (i < n)//先頭からnまで0埋め
-// 	{
-// 		str[i] = 0;
-// 		i++;
-// 	}
-// }
+	str = (char *)s;
+	i = 0;
+	while (i < n)//先頭からnまで0埋め
+	{
+		str[i] = 0;
+		i++;
+	}
+}
 
 void	*ft_calloc(size_t count, size_t size)
 {
@@ -84,6 +84,6 @@ void	*ft_calloc(size_t count, size_t size)
 	result = malloc(count * size);
 	if (!result)
 		return (NULL);
-	// ft_bzero(result, count * size);
+	ft_bzero(result, count * size);
 	return (result);
 }
