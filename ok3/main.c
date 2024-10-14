@@ -21,7 +21,7 @@ int main(void)
 
     // ファイルから行を読み取り、一行ずつ表示する
     printf("Reading from test1.txt:\n");
-    while ((line = get_next_line(fd)) != NULL)
+    while ((line = get_next_line(42)) != NULL)
     {
         line_count++;
         printf("Line %d: %s\n", line_count, line);
