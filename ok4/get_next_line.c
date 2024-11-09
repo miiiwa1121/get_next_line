@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 11:09:06 by jdecorte          #+#    #+#             */
-/*   Updated: 2024/11/09 21:31:22 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/11/09 21:32:51 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*next_line(char *save)
 		return (NULL);
 	}
 	line = ft_calloc((ft_strlen(save) - i + 1), sizeof(char));
-	if(!line)
+	if (!line)
 		return (NULL);
 	i++;
 	j = 0;
@@ -57,7 +57,7 @@ char	*get_line(char *save)
 	while (save[i] && save[i] != '\n')
 		i++;
 	line = ft_calloc(i + 2, sizeof(char));
-	if(!line)
+	if (!line)
 		return (NULL);
 	i = 0;
 	while (save[i] && save[i] != '\n')
@@ -78,7 +78,7 @@ char	*read_file(int fd, char *save)
 	if (!save)
 		save = ft_calloc(1, 1);
 	buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	if(!buff)
+	if (!buff)
 		return (ft_free(save));
 	bytes = 1;
 	while (bytes > 0)
