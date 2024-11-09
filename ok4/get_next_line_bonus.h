@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 11:15:27 by jdecorte          #+#    #+#             */
-/*   Updated: 2024/11/09 21:04:42 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/11/09 21:29:26 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@
 char	*get_next_line(int fd);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strchr(const char *string, int key );
-void	ft_bzero(void *s, size_t n);
+// void	ft_bzero(void *s, size_t n);
+void	*ft_free(void *p);
 void	*ft_calloc(size_t count, size_t size);
 size_t	ft_strlen(const char *string);
 

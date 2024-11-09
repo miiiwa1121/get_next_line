@@ -6,7 +6,7 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 11:09:06 by jdecorte          #+#    #+#             */
-/*   Updated: 2024/10/25 15:04:12 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/11/09 21:28:46 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ char	*read_file(int fd, char *save)
 		save = ft_calloc(1, 1);
 	buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	if(!buff)
-		return (NULL);
+		return (ft_free(save));
 	bytes = 1;
 	while (bytes > 0)
 	{
@@ -90,7 +90,6 @@ char	*read_file(int fd, char *save)
 			free(buff);
 			return (NULL);
 		}
-		buff[bytes] = '\0';
 		save = join_free(save, buff);
 		if (ft_strchr(buff, '\n'))
 			break ;

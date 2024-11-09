@@ -6,11 +6,17 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 11:14:11 by jdecorte          #+#    #+#             */
-/*   Updated: 2024/10/13 19:04:45 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/11/09 21:29:16 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
+
+void	*ft_free(void *p)
+{
+	free(p);
+	return (NULL);
+}
 
 char	*ft_strchr(const char *string, int key )
 {
@@ -63,27 +69,35 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (result);
 }
 
-void	ft_bzero(void *s, size_t n)
-{
-	char	*str;
-	size_t	i;
+// void	ft_bzero(void *s, size_t n)
+// {
+// 	char	*str;
+// 	size_t	i;
 
-	str = (char *)s;
-	i = 0;
-	while (i < n)
-	{
-		str[i] = 0;
-		i++;
-	}
-}
+// 	str = (char *)s;
+// 	i = 0;
+// 	while (i < n)
+// 	{
+// 		str[i] = 0;
+// 		i++;
+// 	}
+// }
 
 void	*ft_calloc(size_t count, size_t size)
 {
 	char	*result;
+	char	*str;
+	size_t	i;
 
 	result = malloc(count * size);
 	if (!result)
 		return (NULL);
-	ft_bzero(result, count * size);
+	str = (char *)result;
+	i = 0;
+	while (i < count * size)
+	{
+		str[i] = 0;
+		i++;
+	}
 	return (result);
 }

@@ -6,11 +6,17 @@
 /*   By: mtsubasa <mtsubasa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 11:14:11 by jdecorte          #+#    #+#             */
-/*   Updated: 2024/10/13 18:59:05 by mtsubasa         ###   ########.fr       */
+/*   Updated: 2024/11/09 21:30:46 by mtsubasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+void	*ft_free(void *p)
+{
+	free(p);
+	return (NULL);
+}
 
 char	*ft_strchr(const char *string, int key )
 {
@@ -63,19 +69,19 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (result);
 }
 
-void	ft_bzero(void *s, size_t n)
-{
-	char	*str;
-	size_t	i;
+// void	ft_bzero(void *s, size_t n)
+// {
+// 	char	*str;
+// 	size_t	i;
 
-	str = (char *)s;
-	i = 0;
-	while (i < n)
-	{
-		str[i] = 0;
-		i++;
-	}
-}
+// 	str = (char *)s;
+// 	i = 0;
+// 	while (i < n)
+// 	{
+// 		str[i] = 0;
+// 		i++;
+// 	}
+// }
 
 void	*ft_calloc(size_t count, size_t size)
 {
