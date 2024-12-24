@@ -1,177 +1,191 @@
 # get_next_line
 
-main
-gcc -Wall -Wextra -Werror -D BUFFER_SIZE=10 main.c get_next_line.c get_next_line_utils.c -o get_next_line
+## English Version
 
-./get_next_line ../text1.txt
+### Project Structure
+```
+.
+├── README.md
+├── get_next_line.c
+├── get_next_line.h
+├── get_next_line_bonus.c
+├── get_next_line_bonus.h
+├── get_next_line_utils.c
+├── get_next_line_utils_bonus.c
+├── main.c
+├── main_bonus.c
+├── test1.txt
+├── test2.txt
+└── test3.txt
 
-leaks
-valgrind --leak-check=full --show-leak-kinds=all -s ./get_next_line
+1 directory, 15 files
+```
 
+### Build and Run
 
-bonus
-gcc -Wall -Wextra -Werror -D BUFFER_SIZE=42 main_bonus.c get_next_line_bonus.c get_next_line_utils_bonus.c get_next_line_bonus.h -o get_next_line_bonus
+#### Main Program
+1. Compile:
+   ```bash
+   gcc -Wall -Wextra -Werror -D BUFFER_SIZE=10 main.c get_next_line.c get_next_line_utils.c -o get_next_line
+   ```
+2. Run:
+   ```bash
+   ./get_next_line test1.txt
+   ```
+3. Memory Leak Check:
+   ```bash
+   valgrind --leak-check=full --show-leak-kinds=all -s ./get_next_line
+   ```
 
-./get_next_line_bonus test1.txt test2.txt test3.txt
+#### Bonus Program
+1. Compile:
+   ```bash
+   gcc -Wall -Wextra -Werror -D BUFFER_SIZE=42 main_bonus.c get_next_line_bonus.c get_next_line_utils_bonus.c -o get_next_line_bonus
+   ```
+2. Run:
+   ```bash
+   ./get_next_line_bonus test1.txt test2.txt test3.txt
+   ```
+3. Memory Leak Check:
+   ```bash
+   valgrind --leak-check=full --show-leak-kinds=all -s ./get_next_line_bonus
+   ```
 
-leaks
-valgrind --leak-check=full --show-leak-kinds=all -s ./get_next_line_bonus
+### Explanation of Behavior
+- Text files written by humans appear as:
+  ```
+  12345678
+  23456789
+  3243456768790898
+  ```
+  To the computer, they look like:
+  ```
+  12345678\n23456789\n3243456768790898\0
+  ```
 
-＜手順＞
+- Example with BUFFER_SIZE = 5:
+  - First read: `12345`
+  - Second read: `678\n2\0`
+  - The program detects a newline (`\n`) and processes the first line.
 
-テキストファイルに人間が
+- Remaining data: `23456789\n3243456768790898\0`
+  - This process continues until all lines are read.
 
-12345678
-23456789
-3243456768790898
+### Key Concepts
+#### Terms
+- **fd**: File descriptor, a unique number representing an open file.
+- **FOPEN_MAX**: Maximum number of files a program can open simultaneously.
+- **static**: Used to retain variable values or restrict variable/function scope within a file.
 
-と記入しても
-コンピューター視点では
+#### Buffer Behavior
+- The buffer reads a fixed size and splits lines based on newlines (`\n`). Remaining data is saved for subsequent reads.
 
-12345678\n23456789\n3243456768790898\0
+---
 
-のように見えている(のかな)
+### Questions and Answers
 
-今回の例で行くとバッファサイズを5とすると、
+#### Q1. Why zero out memory?
+- **Purpose:** Prevent issues with uninitialized memory.
+- **Benefit:** Ensures memory starts in a consistent state, particularly for strings and arrays.
 
-一回目　12345
-二回目　678\n2\0
+#### Q2. Why does `ft_bzero` use `void*`?
+- **Reason:** Allows for flexible use with different data types.
 
-と読み込んだ値の中に改行が見つかるで読み込まれる。
+#### Q3. Why initialize `save` with `ft_calloc(1, 1)`?
+- **Purpose:** Allocate initial memory if `save` is `NULL`. Prepares for subsequent concatenations.
 
-残り　3456789\n3243456768790898\0
+#### Q4. Does `read` remember its position?
+- **Yes:** It uses a file pointer to track progress, automatically updated after each call.
 
-となるが、
-一行ずつ出力するには\n以降の数字を取り除いて、取り除いた数字をファイル全体の数字に戻す必要がある
+#### Q5. What is the standard stream limit?
+- **Streams:** `stdin`, `stdout`, `stderr` are always open. Additional streams are limited by `FOPEN_MAX`.
 
-つまり、
+#### Q6. What does `+2` in `ft_calloc(i + 2, sizeof(char))` do?
+- **Purpose:** Reserves space for a newline (`\n`) and a null terminator (`\0`).
 
-一回目　12345
-二回目　678\n\0
+---
 
-残り　23456789\n3243456768790898\0
+## Japanese Version
 
-になる
+### ビルドと実行
 
-バッファサイズ分読み込んで、/n以上、/n以下で分けて、出力、保存する。
-これらを、バッファサイズ分読み込んだ時点で改行が見つからないまで繰り返す。
+#### メインプログラム
+1. コンパイル:
+   ```bash
+   gcc -Wall -Wextra -Werror -D BUFFER_SIZE=10 main.c get_next_line.c get_next_line_utils.c -o get_next_line
+   ```
+2. 実行:
+   ```bash
+   ./get_next_line test1.txt
+   ```
+3. メモリリークチェック:
+   ```bash
+   valgrind --leak-check=full --show-leak-kinds=all -s ./get_next_line
+   ```
 
-残り　23456789\n3243456768790898\0
+#### ボーナスプログラム
+1. コンパイル:
+   ```bash
+   gcc -Wall -Wextra -Werror -D BUFFER_SIZE=42 main_bonus.c get_next_line_bonus.c get_next_line_utils_bonus.c -o get_next_line_bonus
+   ```
+2. 実行:
+   ```bash
+   ./get_next_line_bonus test1.txt test2.txt test3.txt
+   ```
+3. メモリリークチェック:
+   ```bash
+   valgrind --leak-check=full --show-leak-kinds=all -s ./get_next_line_bonus
+   ```
 
-一回目 23456
-二回目 789\n3\0
+### 動作の説明
+- 人間が記述するテキスト:
+  ```
+  12345678
+  23456789
+  3243456768790898
+  ```
+  コンピュータ視点では次のように見えます:
+  ```
+  12345678\n23456789\n3243456768790898\0
+  ```
 
-残り　243456768790898\0
+- BUFFER_SIZE = 5 の例:
+  - 1回目の読み取り: `12345`
+  - 2回目の読み取り: `678\n2\0`
+  - プログラムは改行を検出し、最初の行を処理します。
 
-一回目 23456
-二回目 789\n\0
+- 残りデータ: `23456789\n3243456768790898\0`
+  - このプロセスをすべての行が読み取られるまで繰り返します。
 
-残り　3243456768790898\0
+### 重要な概念
+#### 用語
+- **fd**: ファイルディスクリプタ。開かれたファイルを表す一意の番号。
+- **FOPEN_MAX**: プログラムが同時に開くことができるファイル数の上限。
+- **static**: 変数の値を保持したり、スコープをファイル内に限定する修飾子。
 
-一回目 32434
-二回目 56768
-三回目 79089
-四回目 8\0
+#### バッファの挙動
+- 固定サイズのバッファを使用し、改行で行を分割。残りのデータは次回の読み取りに保存。
 
-残り\0
+---
 
-8\0を読み込んだ時点で改行が見つからなかったので、
+### 質問と回答
 
-next_lineの
+#### Q1. メモリをゼロ埋めする理由は？
+- **目的:** 未初期化メモリによる問題を防ぐため。
+- **利点:** 一貫した状態でメモリを利用可能に。
 
-	if (!save[i])//終端である　＝　改行が見つからない
-	{
-		free(save);
-		return (NULL);
-	}
+#### Q2. `ft_bzero` が `void*` を使う理由は？
+- **理由:** 型に依存せず汎用的に利用するため。
 
-にて、
+#### Q3. なぜ `save` を `ft_calloc(1, 1)` で初期化する？
+- **目的:** `save` が NULL の場合にメモリを確保し、データ結合の基盤を用意するため。
 
-解放 & returnして、終了
+#### Q4. `read` コマンドは読み取り位置を記憶する？
+- **はい:** ファイルポインタを使用して進行状況を追跡します。
 
-＜用語＞
+#### Q5. 標準ストリームの上限は？
+- **ストリーム:** `stdin`、`stdout`、`stderr` は常に開かれている。追加ストリームは `FOPEN_MAX` に制限される。
 
-fd = 開かれたファイルを表す「番号札」
-FOPEN_MAX = プログラムが同時に開くことを保証される標準ストリーム数の上限
-static = ローカル変数の場合/関数が終了しても値が保持される
-static = グローバル変数や関数の場合/変数や関数のスコープが「ファイル内に限定」され、他のファイルからアクセスできなくなる「内部リンケージ」
+#### Q6. `ft_calloc(i + 2, sizeof(char))` の `+2` の意味は？
+- **目的:** 改行 (`\n`) とヌル終端 (`\0`) 用のバイトを確保するため。
 
-問１
-メモリをゼロ埋めする意味は何？
-A.
-未初期化メモリの防止:
-メモリをゼロ埋めすることで、未初期化のメモリ領域にアクセスする際の不具合を防ぎます。特に、文字列や配列を扱う場合、ゼロで初期化されたメモリは、後で空文字列や適切な終了条件として扱われます。
-
-問２
-ft_bzeroでvoid型で引数を受け取っているのはなぜ？
-A.
-どんな型で渡されても汎用的に動作するために、void* 型で受け取る
-
-
-問３
-read_fileで
-
-if (!save)
-		save = ft_calloc(1, 1);
-
-をしている理由は何？
-A.
-初期状態の確保:
-saveがNULLである場合、これはまだメモリが確保されておらず、データが保存されていない状態を示します。ft_calloc(1, 1)を呼び出すことで、1バイトのメモリを確保し、その内容をゼロで初期化します。
-
-後続の操作のための準備:
-read_file関数では、ファイルからデータを読み込む際に、saveに新しいデータを追加していくことになります。この時、saveがNULLであると、データを結合するためのベースとなるメモリが存在しないため、エラーが発生する可能性があります。初期化することで、saveが空の文字列として扱われ、後続の処理がスムーズに進むようになります。
-
-問４
-readコマンドは、どこまで読んだかを記憶するのですか？
-A.
-readコマンドや多くのファイル読み込み関数は、どこまで読んだかを記憶します。これは「ファイルポインタ」または「ファイル位置インジケータ」と呼ばれる仕組みを使用しています。
-ファイルポインタの特徴：
-
-現在位置の追跡：
-ファイルポインタは、ファイル内の現在の読み取り/書き込み位置を追跡します。
-自動更新：
-readコマンドが実行されるたびに、読み取ったバイト数だけファイルポインタが自動的に更新されます。
-次の読み取り位置：
-次のread操作は、前回の操作で終了した位置から開始されます。
-ファイルディスクリプタとの関連：
-ファイルポインタは、オープンされたファイルのファイルディスクリプタに関連付けられています。
-シーク操作：
-多くのシステムでは、lseek()のような関数を使用してファイルポインタを明示的に移動させることもできます。
-
-
-問５
-標準ストリーム数は何？
-A.
-C言語を含む多くのプログラミング環境で提供される、データの入出力に関する基本的な仕組みです。これらはプログラムが起動時に自動的に初期化され、特定の用途に使われます。
-
-標準ストリーム数について
-C言語のプログラムでは、少なくとも以下の3つの標準ストリームが最初から開いています：
-標準入力 (stdin)
-標準出力 (stdout)
-標準エラー出力 (stderr)
-これらはプログラム起動時に自動的に開かれるストリームです。
-
-FOPEN_MAX の保証の意味
-FOPEN_MAX が指すのは、**これらの標準ストリームを含めた「同時に開くことができるファイルストリームの最大数」**です。たとえば、FOPEN_MAX が20に設定されている場合、次のことが保証されます：
-プログラムが3つの標準ストリーム (stdin, stdout, stderr) を使用している状態でも、さらに17個のストリームを開くことができる。
-これを超えるファイルストリームを開こうとすると、標準ライブラリの関数（例: fopen）がエラーを返します。
-
-問６
-fdとFOPEN_MAXの関係は何？
-A.
-標準ストリームとファイルディスクリプタの対応
-C言語の標準ストリーム (stdin, stdout, stderr) は、低レベルのファイルディスクリプタに直接対応しています。
-
-標準ストリーム	ファイルディスクリプタ	用途
-stdin	0	標準入力
-stdout	1	標準出力
-stderr	2	標準エラー出力
-
-これらのディスクリプタは、プログラム起動時にOSによって自動的に割り当てられ、常に利用可能な状態にあります。
-
-問６
-get_lineのline = ft_calloc(i + 2, sizeof(char));の+2は何
-A.
-改行文字 \n のための1バイト
-文字列終端の \0 のための1バイト
